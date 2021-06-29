@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Projects.BLL.Interfaces
 {
-    public interface ITeamService : IService<Team>
+    public interface IUserService : IService<User>
     {
 
     }

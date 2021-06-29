@@ -9,43 +9,9 @@ using Projects.DAL.Models;
 
 namespace Projects.BLL.Services
 {
-    public class TeamService : ITeamService
+    public class TeamService : GenericService<Team>, ITeamService
     {
-        private ITeamRepository _context;
+        public TeamService(ITeamRepository context) : base(context) { }
 
-        public TeamService(ITeamRepository context)
-        {
-            _context = context;
-        }
-
-        public void AddTeam(Team team)
-        {
-            _context.Create(team);
-        }
-
-        public void DeleteTeam(Team team)
-        {
-            _context.Delete(team);
-        }
-
-        public void DeleteTeam(int id)
-        {
-            _context.Delete(id);
-        }
-
-        public Team GetTeam(int id)
-        {
-            return _context.Get(t => t.Id == id).FirstOrDefault();
-        }
-
-        public IEnumerable<Team> GetTeams()
-        {
-            return _context.Get();
-        }
-
-        public void UpdateTeam(Team team)
-        {
-            _context.Update(team);
-        }
     }
 }
