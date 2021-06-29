@@ -39,9 +39,15 @@ namespace Projects.WebAPI
             });
 
             services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<IProjectService, ProjectService>();
 
-            services.AddAutoMapper(typeof(TeamProfile));
+            services.AddAutoMapper(typeof(TeamProfile), typeof(UserProfile), typeof(TaskProfile), typeof(ProjectProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
