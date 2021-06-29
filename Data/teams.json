@@ -1,0 +1,52 @@
+[
+  {
+    "id": 0,
+    "name": "Denesik - Greenfelder",
+    "createdAt": "2019-08-25T15:48:06.062331+00:00"
+  },
+  {
+    "id": 1,
+    "name": "Durgan Group",
+    "createdAt": "2017-03-31T02:29:28.3740504+00:00"
+  },
+  {
+    "id": 2,
+    "name": "Kassulke LLC",
+    "createdAt": "2019-02-21T15:47:30.3797852+00:00"
+  },
+  {
+    "id": 3,
+    "name": "Harris LLC",
+    "createdAt": "2018-08-28T08:18:46.4160342+00:00"
+  },
+  {
+    "id": 4,
+    "name": "Mitchell Inc",
+    "createdAt": "2019-04-03T09:58:33.0178179+00:00"
+  },
+  {
+    "id": 5,
+    "name": "Smitham Group",
+    "createdAt": "2016-10-05T07:57:02.8427653+00:00"
+  },
+  {
+    "id": 6,
+    "name": "Kutch - Roberts",
+    "createdAt": "2016-10-31T05:05:15.1076578+00:00"
+  },
+  {
+    "id": 7,
+    "name": "Parisian Group",
+    "createdAt": "2016-07-17T01:34:55.0917082+00:00"
+  },
+  {
+    "id": 8,
+    "name": "Schiller Group",
+    "createdAt": "2020-10-05T01:20:14.1953926+00:00"
+  },
+  {
+    "id": 9,
+    "name": "Littel, Turcotte and Muller",
+    "createdAt": "2018-10-19T14:54:27.5549549+00:00"
+  }
+]
