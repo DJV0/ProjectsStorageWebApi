@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Projects.DAL.Models
 {
-    public abstract class TEntity
+    public class Team : TEntity
     {
-        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

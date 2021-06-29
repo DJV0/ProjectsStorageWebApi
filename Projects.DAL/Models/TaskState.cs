@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Projects.DAL.Models
 {
-    public abstract class TEntity
+    public enum TaskState
     {
-        public int Id { get; set; }
+        ToDo,
+        InProgress,
+        Done,
+        Canceled,
     }
 }
