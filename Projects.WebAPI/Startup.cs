@@ -11,6 +11,7 @@ using Projects.BLL.Interfaces;
 using Projects.BLL.Services;
 using Projects.DAL.Interfaces;
 using Projects.DAL.Repositories;
+using Projects.WebAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,8 @@ namespace Projects.WebAPI
 
             services.AddTransient<ITeamRepository, TeamRepository>();
             services.AddTransient<ITeamService, TeamService>();
+
+            services.AddAutoMapper(typeof(TeamProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
