@@ -4,11 +4,11 @@ using Projects.WebAPI.Models.DTOs;
 
 namespace Projects.WebAPI.Mapping
 {
-    public class TeamProfile : Profile
+    public class ProjectProfile : Profile
     {
-        public TeamProfile()
+        public ProjectProfile()
         {
-            CreateMap<TeamDTO, Team>();
+            CreateMap<ProjectDTO, Project>();
         }
     }
 }
