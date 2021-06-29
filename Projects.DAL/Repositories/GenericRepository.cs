@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Projects.DAL.Repositories
 {
-    class GenericRepository<T> : IRepository<T> where T : TEntity
+    public class GenericRepository<T> : IRepository<T> where T : TEntity
     {
         protected readonly IList<T> _context;
         public GenericRepository(IList<T> context)

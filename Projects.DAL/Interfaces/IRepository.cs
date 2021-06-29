@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Projects.DAL.Interfaces
 {
-    interface IRepository<T> where T : TEntity
+    public interface IRepository<T> where T : TEntity
     {
         IEnumerable<T> Get(Expression<Func<T, bool>> filter = null);
         void Create(T entity);
