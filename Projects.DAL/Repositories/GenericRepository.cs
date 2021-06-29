@@ -33,10 +33,10 @@ namespace Projects.DAL.Repositories
         }
         public void Update(T entityUpdate)
         {
-            TEntity entity = _context.FirstOrDefault(e => e.Id == entityUpdate.Id);
+            T entity = _context.FirstOrDefault(e => e.Id == entityUpdate.Id);
             if (entity != null)
             {
-                int index = _context.IndexOf(entityUpdate);
+                int index = _context.IndexOf(entity);
                 _context[index] = entityUpdate;
             }
         }
