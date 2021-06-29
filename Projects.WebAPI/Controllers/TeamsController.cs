@@ -15,8 +15,8 @@ namespace Projects.WebAPI.Controllers
     [Produces("application/json")]
     public class TeamsController : ControllerBase
     {
-        private ITeamService _teamService;
-        private IMapper _mapper;
+        private readonly ITeamService _teamService;
+        private readonly IMapper _mapper;
         public TeamsController(ITeamService teamService, IMapper mapper)
         {
             _teamService = teamService;
@@ -26,14 +26,14 @@ namespace Projects.WebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Team>> Get()
         {
-            return Ok(_teamService.GetTeams());
+            return Ok(_teamService.GetAll());
             
         }
 
         [HttpGet("{id}")]
         public ActionResult<Team> Get(int id)
         {
-            return Ok(_teamService.GetTeam(id));
+            return Ok(_teamService.Get(id));
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace Projects.WebAPI.Controllers
         {
             Team team = _mapper.Map<Team>(teamDTO);
             team.CreatedAt = DateTime.Now;
-            _teamService.AddTeam(team);
+            _teamService.Add(team);
             return CreatedAtAction(nameof(Get), new { id = team.Id }, team);
         }
 
@@ -54,14 +54,14 @@ namespace Projects.WebAPI.Controllers
             }
 
             Team team = _mapper.Map<Team>(teamDTO);
-            _teamService.UpdateTeam(team);
+            _teamService.Update(team);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            _teamService.DeleteTeam(id);
+            _teamService.Delete(id);
             return NoContent();
         }
     }
