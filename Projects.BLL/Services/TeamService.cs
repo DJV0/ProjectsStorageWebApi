@@ -18,6 +18,11 @@ namespace Projects.BLL.Services
             _context = context;
         }
 
+        public void AddTeam(Team team)
+        {
+            _context.Create(team);
+        }
+
         public void DeleteTeam(Team team)
         {
             _context.Delete(team);
@@ -36,6 +41,11 @@ namespace Projects.BLL.Services
         public IEnumerable<Team> GetTeams()
         {
             return _context.Get();
+        }
+
+        public void UpdateTeam(Team team)
+        {
+            _context.Update(team);
         }
     }
 }

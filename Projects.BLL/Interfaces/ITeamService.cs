@@ -11,6 +11,8 @@ namespace Projects.BLL.Interfaces
     {
         IEnumerable<Team> GetTeams();
         Team GetTeam(int id);
+        void AddTeam(Team team);
+        void UpdateTeam(Team team);
         void DeleteTeam(Team team);
         void DeleteTeam(int id);
 
