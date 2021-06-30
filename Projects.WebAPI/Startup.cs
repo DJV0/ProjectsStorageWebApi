@@ -9,7 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Projects.BLL.Interfaces;
 using Projects.BLL.Services;
+using Projects.DAL;
 using Projects.DAL.Interfaces;
+using Projects.DAL.Models;
 using Projects.DAL.Repositories;
 using Projects.WebAPI.Mapping;
 using System;
@@ -42,6 +44,8 @@ namespace Projects.WebAPI
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITaskService, TaskService>();
