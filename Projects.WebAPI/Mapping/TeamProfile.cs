@@ -9,6 +9,7 @@ namespace Projects.WebAPI.Mapping
         public TeamProfile()
         {
             CreateMap<TeamDTO, Team>();
+            CreateMap<Team, BLL.Entities.Team>()
         }
     }
 }

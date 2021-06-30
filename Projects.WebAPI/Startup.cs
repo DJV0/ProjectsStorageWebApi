@@ -50,6 +50,8 @@ namespace Projects.WebAPI
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<DataService>();
+            services.AddTransient<ILinqTasksService, LinqTasksService>();
 
             services.AddAutoMapper(typeof(TeamProfile), typeof(UserProfile), typeof(TaskProfile), typeof(ProjectProfile));
         }
