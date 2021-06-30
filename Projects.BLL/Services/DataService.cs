@@ -13,7 +13,7 @@ namespace Projects.BLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         public List<Project> Projects { get; }
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public DataService(IUnitOfWork unitOfWork, IMapper mapper)
         {

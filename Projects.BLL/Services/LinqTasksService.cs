@@ -10,7 +10,7 @@ namespace Projects.BLL.Services
 {
     public class LinqTasksService : ILinqTasksService
     {
-        private List<Project> _projects;
+        private readonly List<Project> _projects;
 
         public LinqTasksService(DataService dataService)
         {

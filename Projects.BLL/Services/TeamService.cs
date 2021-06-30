@@ -11,7 +11,7 @@ namespace Projects.BLL.Services
 {
     public class TeamService : ITeamService
     {
-        private IUnitOfWork _context;
+        private readonly IUnitOfWork _context;
         public TeamService(IUnitOfWork context)
         {
             _context = context;
