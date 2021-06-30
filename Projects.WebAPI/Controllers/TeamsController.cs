@@ -40,7 +40,6 @@ namespace Projects.WebAPI.Controllers
         public ActionResult Post(TeamDTO teamDTO)
         {
             Team team = _mapper.Map<Team>(teamDTO);
-            team.CreatedAt = DateTime.Now;
             _teamService.Add(team);
             return CreatedAtAction(nameof(Get), new { id = team.Id }, team);
         }

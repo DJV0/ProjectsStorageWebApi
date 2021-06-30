@@ -9,9 +9,43 @@ using Projects.DAL.Models;
 
 namespace Projects.BLL.Services
 {
-    public class TeamService : GenericService<Team>, ITeamService
+    public class TeamService : ITeamService
     {
-        public TeamService(ITeamRepository context) : base(context) { }
+        private IUnitOfWork _context;
+        public TeamService(IUnitOfWork context)
+        {
+            _context = context;
+        }
 
+        public void Add(Team team)
+        {
+            team.CreatedAt = DateTime.Now;
+            _context.TeamRepository.Create(team);
+        }
+
+        public void Delete(Team team)
+        {
+            _context.TeamRepository.Delete(team);
+        }
+
+        public void Delete(int id)
+        {
+            _context.TeamRepository.Delete(id);
+        }
+
+        public Team Get(int id)
+        {
+            return _context.TeamRepository.Get(t => t.Id == id).FirstOrDefault();
+        }
+
+        public IEnumerable<Team> GetAll()
+        {
+            return _context.TeamRepository.Get();
+        }
+
+        public void Update(Team team)
+        {
+            _context.TeamRepository.Update(team);
+        }
     }
 }
