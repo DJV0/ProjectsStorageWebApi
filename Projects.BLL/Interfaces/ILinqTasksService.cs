@@ -10,9 +10,9 @@ namespace Projects.BLL.Interfaces
     {
         Dictionary<ProjectInfo, int> GetProjectTasksCountByAuthorId(int authorId);
         List<TaskInfo> GetPerformerTasks(int performerId);
-        List<(int Id, string Name)> GetFinishedPerformerTasks2021(int performerId);
+        List<Task3DTO> GetFinishedPerformerTasks2021(int performerId);
         List<Task4DTO> GetTeamsWhichMembersAgeOver10Years();
-        List<IGrouping<UserInfo, TaskInfo>> GetSortedUsers();
+        List<Task5DTO> GetSortedUsers();
         Task6DTO GetTask6(int userId);
         List<Task7DTO> GetTask7();
     }

@@ -15,55 +15,54 @@ namespace Projects.WebAPI.Controllers
     [Produces("application/json")]
     public class LinqTasksController : ControllerBase
     {
-        private ILinqTasksService _tasksService;
+        private readonly ILinqTasksService _tasksService;
         public LinqTasksController(ILinqTasksService linqTasksService)
         {
             _tasksService = linqTasksService;
         }
 
-        [HttpGet("id")]
-        public ActionResult<Dictionary<ProjectInfo, int>> GetTask1(int id)
+        [HttpGet]
+        public ActionResult<List<KeyValuePair<ProjectInfo, int>>> GetTask1(int id)
         {
-            var result = JsonConvert.SerializeObject(_tasksService.GetProjectTasksCountByAuthorId(id));
-            return Ok(result);
+            return Ok(_tasksService.GetProjectTasksCountByAuthorId(id).ToList());
         }
 
-        [HttpGet("id")]
+        [HttpGet]
         public ActionResult<List<BLL.Entities.TaskInfo>> GetTask2(int id)
         {
             return Ok(_tasksService.GetPerformerTasks(id));
         }
 
-        [HttpGet("id")]
-        public ActionResult<List<(int Id, string Name)>> GetTask3(int id)
+        [HttpGet]
+        public ActionResult<List<Task3DTO>> GetTask3(int id)
         {
             //id = 114
-            return Ok(JsonConvert.SerializeObject(_tasksService.GetFinishedPerformerTasks2021(id)));
+            return Ok(_tasksService.GetFinishedPerformerTasks2021(id));
         }
 
         [HttpGet]
         public ActionResult<List<Task4DTO>> GetTask4()
         {
-            return Ok(JsonConvert.SerializeObject(_tasksService.GetTeamsWhichMembersAgeOver10Years()));
+            return Ok(_tasksService.GetTeamsWhichMembersAgeOver10Years());
         }
 
         [HttpGet]
-        public ActionResult<List<IGrouping<UserInfo, TaskInfo>>> GetTask5()
+        public ActionResult<List<Task5DTO>> GetTask5()
         {
-            return Ok(JsonConvert.SerializeObject(_tasksService.GetSortedUsers()));
+            return Ok(_tasksService.GetSortedUsers());
         }
 
-        [HttpGet("id")]
+        [HttpGet]
         public ActionResult<Task6DTO> GetTask6(int id)
         {
             //id = 28
-            return Ok(JsonConvert.SerializeObject(_tasksService.GetTask6(id)));
+            return Ok(_tasksService.GetTask6(id));
         }
 
         [HttpGet]
         public ActionResult<List<Task7DTO>> GetTask7()
         {
-            return Ok(JsonConvert.SerializeObject(_tasksService.GetTask7()));
+            return Ok(_tasksService.GetTask7());
         }
     }
 }

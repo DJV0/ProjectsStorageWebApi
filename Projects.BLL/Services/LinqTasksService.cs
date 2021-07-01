@@ -17,13 +17,13 @@ namespace Projects.BLL.Services
             _projects = dataService.Projects;
         }
 
-        public List<(int Id, string Name)> GetFinishedPerformerTasks2021(int performerId)
+        public List<Task3DTO> GetFinishedPerformerTasks2021(int performerId)
         {
             return _projects
                 .SelectMany(project => project.Tasks
                         .Where(task => task.PerformerId == performerId &&
                         task.State == TaskStateInfo.Done &&
-                        task.FinishedAt?.Year == 2021), (project, task) => (task.Id, task.Name))
+                        task.FinishedAt?.Year == 2021), (project, task) => new Task3DTO { Id = task.Id, Name = task.Name })
                 .ToList();
         }
 
@@ -42,13 +42,14 @@ namespace Projects.BLL.Services
                 .ToDictionary(project => project, project => project.Tasks.Count());
         }
 
-        public List<IGrouping<UserInfo, Entities.TaskInfo>> GetSortedUsers()
+        public List<Task5DTO> GetSortedUsers()
         {
             return _projects
                 .SelectMany(project => project.Tasks, (project, task) => task)
                 .OrderByDescending(task => task.Name.Length)
                 .GroupBy(task => task.Performer)
                 .OrderBy(group => group.Key.FirstName)
+                .Select(group => new Task5DTO { User = group.Key, Tasks = group.ToList()})
                 .ToList();
         }
 
@@ -111,6 +112,7 @@ namespace Projects.BLL.Services
                             Name = team.Name,
                             Users = user.OrderByDescending(user => user.RegisteredAt).ToList(),
                         })
+                .Distinct()
                 .ToList();
         }
     }
