@@ -12,21 +12,21 @@ namespace Projects.BLL.Services
     public class DataService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public List<Project> Projects { get; }
+        public List<ProjectInfo> Projects { get; }
         private readonly IMapper _mapper;
 
         public DataService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            GenerateData();
+            Projects = GenerateData();
         }
 
-        private List<Project> GenerateData()
+        private List<ProjectInfo> GenerateData()
         {
             return _unitOfWork.ProjectRepository.Get()
                 .Join(_unitOfWork.UserRepository.Get().Join(_unitOfWork.TeamRepository.Get(), 
-                user => user.TeamId, team => team.Id, (user, team) => new User
+                user => user.TeamId, team => team.Id, (user, team) => new UserInfo
                 {
                     Id = user.Id,
                     FirstName = user.FirstName,
@@ -35,10 +35,10 @@ namespace Projects.BLL.Services
                     Email = user.Email,
                     RegisteredAt = user.RegisteredAt,
                     TeamId = user.TeamId,
-                    Team = _mapper.Map<Team>(team)
+                    Team = _mapper.Map<TeamInfo>(team)
                 }),
                 project => project.AuthorId,
-                user => user.Id, (project, user) => new Project
+                user => user.Id, (project, user) => new ProjectInfo
                 {
                     Id = project.Id,
                     Name = project.Name,
@@ -50,7 +50,7 @@ namespace Projects.BLL.Services
                     TeamId = project.TeamId
                 })
                 .Join(_unitOfWork.TeamRepository.Get(), project => project.TeamId, team => team.Id, 
-                (project, team) => new Project
+                (project, team) => new ProjectInfo
                 {
                     Id = project.Id,
                     Name = project.Name,
@@ -60,12 +60,12 @@ namespace Projects.BLL.Services
                     AuthorId = project.AuthorId,
                     Author = project.Author,
                     TeamId = project.TeamId,
-                    Team = _mapper.Map<Team>(team)
+                    Team = _mapper.Map<TeamInfo>(team)
                 })
                 .GroupJoin(
                     _unitOfWork.TaskRepository.Get()
                         .Join(_unitOfWork.UserRepository.Get().Join(_unitOfWork.TeamRepository.Get(), 
-                        user => user.TeamId, team => team.Id, (user, team) => new User
+                        user => user.TeamId, team => team.Id, (user, team) => new UserInfo
                         {
                             Id = user.Id,
                             FirstName = user.FirstName,
@@ -74,14 +74,14 @@ namespace Projects.BLL.Services
                             Email = user.Email,
                             RegisteredAt = user.RegisteredAt,
                             TeamId = user.TeamId,
-                            Team = _mapper.Map<Team>(team)
+                            Team = _mapper.Map<TeamInfo>(team)
                         }),
-                                task => task.PerformerId, user => user.Id, (task, user) => new Entities.Task
+                                task => task.PerformerId, user => user.Id, (task, user) => new Entities.TaskInfo
                                 {
                                     Id = task.Id,
                                     Name = task.Name,
                                     Description = task.Description,
-                                    State = _mapper.Map<TaskState>(task.State),
+                                    State = _mapper.Map<TaskStateInfo>(task.State),
                                     CreatedAt = task.CreatedAt,
                                     FinishedAt = task.FinishedAt,
                                     PerformerId = task.PerformerId,
@@ -90,7 +90,7 @@ namespace Projects.BLL.Services
 
                                 })
                         .Join(_unitOfWork.ProjectRepository.Get(), task => task.ProjectId, project => project.Id, 
-                        (task, project) => new Entities.Task
+                        (task, project) => new Entities.TaskInfo
                         {
                             Id = task.Id,
                             Name = task.Name,
@@ -101,11 +101,11 @@ namespace Projects.BLL.Services
                             PerformerId = task.PerformerId,
                             Performer = task.Performer,
                             ProjectId = task.ProjectId,
-                            Project = _mapper.Map<Project>(project)
+                            Project = _mapper.Map<ProjectInfo>(project)
                         }),
                     project => project.Id,
                     task => task.ProjectId,
-                    (project, tasks) => new Project
+                    (project, tasks) => new ProjectInfo
                     {
                         Id = project.Id,
                         Name = project.Name,

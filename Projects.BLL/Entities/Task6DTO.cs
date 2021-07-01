@@ -8,10 +8,10 @@ namespace Projects.BLL.Entities
 {
     public class Task6DTO
     {
-        public User User { get; set; }
-        public Project LastProject { get; set; }
+        public UserInfo User { get; set; }
+        public ProjectInfo LastProject { get; set; }
         public int LastProjectTasks { get; set; }
         public int InProgressOrCanceledTasks { get; set; }
-        public Entities.Task LongestUserTask { get; set; }
+        public Entities.TaskInfo LongestUserTask { get; set; }
     }
 }

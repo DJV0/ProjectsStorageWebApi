@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Projects.BLL.Entities
 {
-
-    public class Team
+    public enum TaskStateInfo
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime CreatedAt { get; set; }
+        ToDo,
+        InProgress,
+        Done,
+        Canceled,
     }
-
 }

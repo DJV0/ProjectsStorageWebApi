@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projects.BLL.Entities
 {
-    public class User
+    public class UserInfo
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -14,7 +14,7 @@ namespace Projects.BLL.Entities
         public string Email { get; set; }
         public DateTime RegisteredAt { get; set; }
         public DateTime BirthDay { get; set; }
-        public Team Team { get; set; }
+        public TeamInfo Team { get; set; }
         public int? TeamId { get; set; }
     }
 

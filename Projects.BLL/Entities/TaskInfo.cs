@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Projects.BLL.Entities
 {
-    public class Task
+    public class TaskInfo
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public TaskState State { get; set; }
+        public TaskStateInfo State { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public int ProjectId { get; set; }
-        public Project Project { get; set; }
+        public ProjectInfo Project { get; set; }
         public int PerformerId { get; set; }
-        public User Performer { get; set; }
+        public UserInfo Performer { get; set; }
     }
 
 }
