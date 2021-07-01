@@ -7,6 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Projects.BLL.Interfaces;
+using Projects.BLL.Services;
+using Projects.DAL;
+using Projects.DAL.Interfaces;
+using Projects.DAL.Models;
+using Projects.DAL.Repositories;
+using Projects.WebAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +39,21 @@ namespace Projects.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Projects.WebAPI", Version = "v1" });
             });
+
+            services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<DataService>();
+            services.AddTransient<ILinqTasksService, LinqTasksService>();
+
+            services.AddAutoMapper(typeof(TeamProfile), typeof(UserProfile), typeof(TaskProfile), typeof(ProjectProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
