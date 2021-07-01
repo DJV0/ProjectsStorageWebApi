@@ -9,7 +9,7 @@ namespace Projects.WebAPI.Mapping
         public TaskProfile()
         {
             CreateMap<TaskDTO, Task>();
-            CreateMap<TaskState, BLL.Entities.TaskState>();
+            CreateMap<TaskState, BLL.Entities.TaskStateInfo>();
         }
     }
 }

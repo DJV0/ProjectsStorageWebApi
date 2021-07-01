@@ -9,7 +9,7 @@ namespace Projects.WebAPI.Mapping
         public ProjectProfile()
         {
             CreateMap<ProjectDTO, Project>();
-            CreateMap<Project, BLL.Entities.Project>();
+            CreateMap<Project, BLL.Entities.ProjectInfo>();
         }
     }
 }

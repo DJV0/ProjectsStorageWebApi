@@ -10,7 +10,7 @@ namespace Projects.BLL.Services
 {
     public class LinqTasksService : ILinqTasksService
     {
-        private readonly List<Project> _projects;
+        private readonly List<ProjectInfo> _projects;
 
         public LinqTasksService(DataService dataService)
         {
@@ -22,12 +22,12 @@ namespace Projects.BLL.Services
             return _projects
                 .SelectMany(project => project.Tasks
                         .Where(task => task.PerformerId == performerId &&
-                        task.State == TaskState.Done &&
+                        task.State == TaskStateInfo.Done &&
                         task.FinishedAt?.Year == 2021), (project, task) => (task.Id, task.Name))
                 .ToList();
         }
 
-        public List<Entities.Task> GetPerformerTasks(int performerId)
+        public List<Entities.TaskInfo> GetPerformerTasks(int performerId)
         {
             return _projects
                 .SelectMany(project => project.Tasks.Where(task => task.PerformerId == performerId && task.Name.Length < 45),
@@ -35,14 +35,14 @@ namespace Projects.BLL.Services
                 .ToList();
         }
 
-        public Dictionary<Project, int> GetProjectTasksCountByAuthorId(int authorId)
+        public Dictionary<ProjectInfo, int> GetProjectTasksCountByAuthorId(int authorId)
         {
             return _projects
                 .Where(project => project.AuthorId == authorId)
                 .ToDictionary(project => project, project => project.Tasks.Count());
         }
 
-        public List<IGrouping<User, Entities.Task>> GetSortedUsers()
+        public List<IGrouping<UserInfo, Entities.TaskInfo>> GetSortedUsers()
         {
             return _projects
                 .SelectMany(project => project.Tasks, (project, task) => task)
