@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Projects.BLL.Interfaces;
-using Projects.DAL.Models;
+using Projects.DAL.Entities;
 using Projects.WebAPI.Models.DTOs;
 using System;
 using System.Collections.Generic;

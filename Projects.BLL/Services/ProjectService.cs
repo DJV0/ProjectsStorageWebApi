@@ -1,6 +1,6 @@
 ﻿using Projects.BLL.Interfaces;
-using Projects.DAL.Interfaces;
-using Projects.DAL.Models;
+using Projects.DAL;
+using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,8 @@ namespace Projects.BLL.Services
 {
     public class ProjectService :  IProjectService
     {
-        private readonly IUnitOfWork _context;
-        public ProjectService(IUnitOfWork context)
+        private readonly ProjectsDbContext _context;
+        public ProjectService(ProjectsDbContext context)
         {
             _context = context;
         }
@@ -21,42 +21,54 @@ namespace Projects.BLL.Services
         {
             if (!ExistTeam(project.TeamId) || !ExistAuthor(project.AuthorId) || project.Deadline < DateTime.Now) return;
             project.CreatedAt = DateTime.Now;
-            _context.ProjectRepository.Create(project);
+            _context.Projects.Add(project);
+            _context.SaveChanges();
         }
 
         public void Delete(Project project)
         {
-            _context.ProjectRepository.Delete(project);
+            _context.Projects.Remove(project);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            _context.ProjectRepository.Delete(id);
+            var project = _context.Projects.Find(id);
+            if (project != null) Delete(project);
         }
 
         public Project Get(int id)
         {
-            return _context.ProjectRepository.Get(p => p.Id == id).FirstOrDefault();
+            return _context.Projects
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Project> GetAll()
         {
-            return _context.ProjectRepository.Get();
+            return _context.Projects
+                .ToList();
         }
 
         public void Update(Project project)
         {
             if (!ExistTeam(project.TeamId) || !ExistAuthor(project.AuthorId) || project.Deadline < DateTime.Now) return;
-            _context.ProjectRepository.Update(project);
+            _context.Projects.Attach(project);
+            _context.Entry(project).Property(t => t.Name).IsModified = true;
+            _context.Entry(project).Property(t => t.Description).IsModified = true;
+            _context.Entry(project).Property(t => t.Deadline).IsModified = true;
+            _context.Entry(project).Property(t => t.AuthorId).IsModified = true;
+            _context.Entry(project).Property(t => t.TeamId).IsModified = true;
+
+            _context.SaveChanges();
         }
 
         private bool ExistTeam(int id)
         {
-            return _context.TeamRepository.Get(t => t.Id == id).FirstOrDefault() != null ? true : false;
+            return _context.Teams.Find(id) != null ? true : false;
         }
         private bool ExistAuthor(int id)
         {
-            return _context.UserRepository.Get(u => u.Id == id).FirstOrDefault() != null ? true : false;
+            return _context.Users.Find(id) != null ? true : false;
         }
     }
 }

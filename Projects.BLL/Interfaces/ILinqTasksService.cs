@@ -1,4 +1,5 @@
 ﻿using Projects.BLL.Entities;
+using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,8 @@ namespace Projects.BLL.Interfaces
 {
     public interface ILinqTasksService
     {
-        Dictionary<ProjectInfo, int> GetProjectTasksCountByAuthorId(int authorId);
-        List<TaskInfo> GetPerformerTasks(int performerId);
+        Dictionary<Project, int> GetProjectTasksCountByAuthorId(int authorId);
+        List<Task> GetPerformerTasks(int performerId);
         List<Task3DTO> GetFinishedPerformerTasks2021(int performerId);
         List<Task4DTO> GetTeamsWhichMembersAgeOver10Years();
         List<Task5DTO> GetSortedUsers();

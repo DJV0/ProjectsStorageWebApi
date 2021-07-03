@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projects.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace Projects.BLL.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<UserInfo> Users { get; set; }
+        public List<User> Users { get; set; }
     }
 }

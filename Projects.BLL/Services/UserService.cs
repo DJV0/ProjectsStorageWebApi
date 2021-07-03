@@ -1,18 +1,18 @@
-﻿using Projects.BLL.Interfaces;
-using Projects.DAL.Interfaces;
-using Projects.DAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Projects.BLL.Interfaces;
+using Projects.DAL;
+using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects.BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUnitOfWork _context;
-        public UserService(IUnitOfWork context)
+        private readonly ProjectsDbContext _context;
+        public UserService(ProjectsDbContext context)
         {
             _context = context;
         }
@@ -21,38 +21,51 @@ namespace Projects.BLL.Services
         {
             if (user.TeamId != null && !ExistTeam(user.TeamId)) return;
             user.RegisteredAt = DateTime.Now;
-            _context.UserRepository.Create(user);
+            _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
         public void Delete(User user)
         {
-            _context.UserRepository.Delete(user);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            _context.UserRepository.Delete(id);
+            var user = _context.Users.Find(id);
+            if (user != null) Delete(user);
         }
 
         public User Get(int id)
         {
-            return _context.UserRepository.Get(u => u.Id == id).FirstOrDefault();
+            return _context.Users
+                .FirstOrDefault(user => user.Id == id);
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _context.UserRepository.Get();
+            return _context.Users
+                .ToList();
         }
 
         public void Update(User user)
         {
             if (user.TeamId != null && !ExistTeam(user.TeamId)) return;
-            _context.UserRepository.Update(user);
+
+            _context.Users.Attach(user);
+            _context.Entry(user).Property(t => t.FirstName).IsModified = true;
+            _context.Entry(user).Property(t => t.LastName).IsModified = true;
+            _context.Entry(user).Property(t => t.Email).IsModified = true;
+            _context.Entry(user).Property(t => t.BirthDay).IsModified = true;
+            _context.Entry(user).Property(t => t.TeamId).IsModified = true;
+
+            _context.SaveChanges();
         }
 
         private bool ExistTeam(int? id)
         {
-            return _context.TeamRepository.Get(t => t.Id == id).FirstOrDefault() != null ? true : false;
+            return _context.Teams.Find(id) != null ? true : false;
         }
     }
 }

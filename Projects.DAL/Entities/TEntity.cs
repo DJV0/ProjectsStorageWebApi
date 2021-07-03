@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projects.BLL.Entities
+namespace Projects.DAL.Entities
 {
-    public enum TaskStateInfo
+    public abstract class TEntity
     {
-        ToDo,
-        InProgress,
-        Done,
-        Canceled,
+        public int Id { get; set; }
     }
 }

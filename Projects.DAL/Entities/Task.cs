@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Projects.BLL.Entities
+namespace Projects.DAL.Entities
 {
-    public class TaskInfo
+    public class Task : TEntity
     {
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string Description { get; set; }
-        public TaskStateInfo State { get; set; }
+
+        [Required]
+        [Range(0,3)]
+        public TaskState State { get; set; }
+
+        [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
-        public int ProjectId { get; set; }
-        public ProjectInfo Project { get; set; }
-        public int PerformerId { get; set; }
-        public UserInfo Performer { get; set; }
-    }
 
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
+
+        public int PerformerId { get; set; }
+        public User Performer { get; set; }
+    }
 }

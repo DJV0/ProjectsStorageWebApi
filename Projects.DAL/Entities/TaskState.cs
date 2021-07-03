@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projects.DAL.Models
+namespace Projects.DAL.Entities
 {
     public enum TaskState
     {

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,9 +11,6 @@ using Microsoft.OpenApi.Models;
 using Projects.BLL.Interfaces;
 using Projects.BLL.Services;
 using Projects.DAL;
-using Projects.DAL.Interfaces;
-using Projects.DAL.Models;
-using Projects.DAL.Repositories;
 using Projects.WebAPI.Mapping;
 using System;
 using System.Collections.Generic;
@@ -34,17 +32,15 @@ namespace Projects.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => 
+                            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Projects.WebAPI", Version = "v1" });
             });
 
-            services.AddTransient<ITeamRepository, TeamRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ITaskRepository, TaskRepository>();
-            services.AddTransient<IProjectRepository, ProjectRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddDbContext<ProjectsDbContext>(options =>
+                            options.UseSqlServer(Configuration["ConnectionStrings:ProjectsDatabase"]));
 
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IUserService, UserService>();

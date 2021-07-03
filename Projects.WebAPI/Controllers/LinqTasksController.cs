@@ -5,8 +5,8 @@ using Projects.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Projects.DAL.Entities;
 
 namespace Projects.WebAPI.Controllers
 {
@@ -21,19 +21,19 @@ namespace Projects.WebAPI.Controllers
             _tasksService = linqTasksService;
         }
 
-        [HttpGet]
-        public ActionResult<List<KeyValuePair<ProjectInfo, int>>> GetTask1(int id)
+        [HttpGet("{id}")]
+        public ActionResult<List<KeyValuePair<Project, int>>> GetTask1(int id)
         {
             return Ok(_tasksService.GetProjectTasksCountByAuthorId(id).ToList());
         }
 
-        [HttpGet]
-        public ActionResult<List<BLL.Entities.TaskInfo>> GetTask2(int id)
+        [HttpGet("{id}")]
+        public ActionResult<List<Task>> GetTask2(int id)
         {
             return Ok(_tasksService.GetPerformerTasks(id));
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public ActionResult<List<Task3DTO>> GetTask3(int id)
         {
             //id = 114
@@ -52,7 +52,7 @@ namespace Projects.WebAPI.Controllers
             return Ok(_tasksService.GetSortedUsers());
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public ActionResult<Task6DTO> GetTask6(int id)
         {
             //id = 28

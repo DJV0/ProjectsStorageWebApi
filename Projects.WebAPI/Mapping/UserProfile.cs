@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Projects.DAL.Models;
+using Projects.DAL.Entities;
 using Projects.WebAPI.Models.DTOs;
 
 namespace Projects.WebAPI.Mapping
