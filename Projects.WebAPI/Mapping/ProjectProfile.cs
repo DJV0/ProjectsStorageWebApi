@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Projects.DAL.Models;
+using Projects.DAL.Entities;
 using Projects.WebAPI.Models.DTOs;
 
 namespace Projects.WebAPI.Mapping
@@ -9,7 +9,6 @@ namespace Projects.WebAPI.Mapping
         public ProjectProfile()
         {
             CreateMap<ProjectDTO, Project>();
-            CreateMap<Project, BLL.Entities.ProjectInfo>();
         }
     }
 }
