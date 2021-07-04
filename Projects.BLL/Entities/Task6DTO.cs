@@ -10,7 +10,7 @@ namespace Projects.BLL.Entities
     {
         public User User { get; set; }
         public Project LastProject { get; set; }
-        public int LastProjectTasks { get; set; }
+        public int LastProjectTasksCount { get; set; }
         public int InProgressOrCanceledTasks { get; set; }
         public Task LongestUserTask { get; set; }
     }

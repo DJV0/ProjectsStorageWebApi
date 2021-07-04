@@ -1,118 +1,106 @@
-﻿using Projects.BLL.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Projects.BLL.Entities;
 using Projects.BLL.Interfaces;
+using Projects.DAL;
+using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects.BLL.Services
 {
     public class LinqTasksService : ILinqTasksService
     {
-        private readonly List<ProjectInfo> _projects;
+        private readonly ProjectsDbContext _context;
 
-        public LinqTasksService(DataService dataService)
+        public LinqTasksService(ProjectsDbContext context)
         {
-            _projects = dataService.Projects;
+            _context = context;
         }
 
         public List<Task3DTO> GetFinishedPerformerTasks2021(int performerId)
         {
-            return _projects
-                .SelectMany(project => project.Tasks
-                        .Where(task => task.PerformerId == performerId &&
-                        task.State == TaskStateInfo.Done &&
-                        task.FinishedAt?.Year == 2021), (project, task) => new Task3DTO { Id = task.Id, Name = task.Name })
+            return _context.Tasks
+                .Where(task => task.PerformerId == performerId && task.State == TaskState.Done &&
+                                (task.FinishedAt.HasValue ? task.FinishedAt.Value.Year : default(DateTime).Year) == 2021)
+                .Select(task => new Task3DTO { Id = task.Id, Name = task.Name })
                 .ToList();
         }
 
-        public List<Entities.TaskInfo> GetPerformerTasks(int performerId)
+        public List<Task> GetPerformerTasks(int performerId)
         {
-            return _projects
-                .SelectMany(project => project.Tasks.Where(task => task.PerformerId == performerId && task.Name.Length < 45),
-                            (project, task) => task)
+            return _context.Tasks
+                .Where(task => task.PerformerId == performerId && task.Name.Length < 45)
                 .ToList();
         }
 
-        public Dictionary<ProjectInfo, int> GetProjectTasksCountByAuthorId(int authorId)
+        public Dictionary<Project, int> GetProjectTasksCountByAuthorId(int authorId)
         {
-            return _projects
-                .Where(project => project.AuthorId == authorId)
+            return _context.Users
+                .Include(user => user.Projects)
+                    .ThenInclude(project => project.Tasks)
+                .FirstOrDefault(user => user.Id == authorId)
+                .Projects
                 .ToDictionary(project => project, project => project.Tasks.Count());
         }
 
         public List<Task5DTO> GetSortedUsers()
         {
-            return _projects
-                .SelectMany(project => project.Tasks, (project, task) => task)
-                .OrderByDescending(task => task.Name.Length)
-                .GroupBy(task => task.Performer)
-                .OrderBy(group => group.Key.FirstName)
-                .Select(group => new Task5DTO { User = group.Key, Tasks = group.ToList()})
+            return _context.Users
+                .Include(user => user.Tasks)
+                .Select(user => new Task5DTO { User = user, Tasks = user.Tasks
+                                                            .OrderByDescending(task => task.Name.Length).ToList() })
+                .OrderBy(t => t.User.FirstName)
                 .ToList();
         }
 
         public Task6DTO GetTask6(int userId)
         {
-            return _projects
-                .SelectMany(project => project.Tasks, (project, task) => task)
-                .GroupBy(task => task.PerformerId)
-                .Where(group => group.Key == userId)
-                .Select(group => new
+            return _context.Projects
+                .Include(project => project.Tasks)
+                .Include(project => project.Author)
+                    .ThenInclude(user => user.Tasks)
+                .Where(project => project.AuthorId == userId)
+                .Select(project => new Task6DTO
                 {
-                    userId,
-                    Tasks = group.ToList()
+                    User = project.Author,
+                    LastProject = project,
+                    LastProjectTasksCount = project.Tasks.Count(),
+                    InProgressOrCanceledTasks = project.Author.Tasks.Where(task => task.FinishedAt == null).Count(),
+                    LongestUserTask = project.Author.Tasks.Where(task => task.FinishedAt.HasValue).FirstOrDefault()
                 })
-                .Join(_projects.Where(project => project.AuthorId == userId), tasks => tasks.userId,
-                        projects => projects.AuthorId, (tasks, project) => new
-                        {
-                            User = project.Author,
-                            Project = project,
-                            Tasks = tasks.Tasks
-                        })
-                .OrderByDescending(result => result.Project.CreatedAt)
-                .Select(result => new Task6DTO
-                {
-                    User = result.User,
-                    LastProject = result.Project,
-                    LastProjectTasks = result.Project.Tasks.Count(),
-                    InProgressOrCanceledTasks = result.Tasks.Where(task => task.FinishedAt == null).Count(),
-                    LongestUserTask = result.Tasks.Where(task => task.FinishedAt != null)?
-                                            .OrderByDescending(task => task.FinishedAt - task.CreatedAt).FirstOrDefault()
-                })
+                .OrderByDescending(item => item.LastProject.CreatedAt)
                 .FirstOrDefault();
         }
 
         public List<Task7DTO> GetTask7()
         {
-            return _projects
+            return _context.Projects
+                .Include(project => project.Tasks)
                 .Select(project => new Task7DTO
                 {
                     Project = project,
                     LongestDescriptionTask = project.Tasks.OrderByDescending(task => task.Description).FirstOrDefault(),
                     ShortestNameTask = project.Tasks.OrderBy(task => task.Name).FirstOrDefault(),
                     ProjectMembersCount =
-                            project.Description.Length > 20 || project.Tasks.Count() < 3 ? project.Tasks
-                                .Select(task => task.Performer).Distinct().Count() : 0
+                                    project.Description.Length > 20 || project.Tasks.Count() < 3 ? project.Tasks
+                                        .Select(task => task.Performer).Distinct().Count() : 0
                 })
                 .ToList();
         }
 
         public List<Task4DTO> GetTeamsWhichMembersAgeOver10Years()
         {
-            return _projects
-                .Select(p => p.Team).Distinct()
-                .GroupJoin(_projects
-                            .SelectMany(project => project.Tasks, (project, task) => task.Performer).Distinct()
-                            .Where(user => DateTime.Now.Year - user.BirthDay.Year > 10),
-                        team => team.Id, user => user.TeamId, (team, user) => new Task4DTO
-                        {
-                            Id = team.Id,
-                            Name = team.Name,
-                            Users = user.OrderByDescending(user => user.RegisteredAt).ToList(),
-                        })
-                .Distinct()
+            return _context.Teams
+                .Include(team => team.Members.Where(user => DateTime.Now.Year - user.BirthDay.Year > 10))
+                .Where(team => team.Members.Count > 0)
+                .Select(team => new Task4DTO
+                {
+                    Id = team.Id,
+                    Name = team.Name,
+                    Users = team.Members.OrderByDescending(user => user.RegisteredAt).ToList()
+                })
                 .ToList();
         }
     }
