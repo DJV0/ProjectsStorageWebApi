@@ -64,11 +64,11 @@ namespace Projects.BLL.Services
 
         private bool ExistTeam(int id)
         {
-            return _context.Teams.Find(id) != null ? true : false;
+            return _context.Teams.Find(id) != null;
         }
         private bool ExistAuthor(int id)
         {
-            return _context.Users.Find(id) != null ? true : false;
+            return _context.Users.Find(id) != null;
         }
     }
 }

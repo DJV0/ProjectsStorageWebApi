@@ -65,7 +65,7 @@ namespace Projects.BLL.Services
 
         private bool ExistTeam(int? id)
         {
-            return _context.Teams.Find(id) != null ? true : false;
+            return _context.Teams.Find(id) != null;
         }
     }
 }

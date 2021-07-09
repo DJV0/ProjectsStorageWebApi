@@ -68,12 +68,12 @@ namespace Projects.BLL.Services
 
         private bool ExistPerformer(int id)
         {
-            return _context.Users.Find(id) != null ? true : false;
+            return _context.Users.Find(id) != null;
         }
 
         private bool ExistProject(int id)
         {
-            return _context.Projects.Find(id) != null ? true : false;
+            return _context.Projects.Find(id) != null;
         }
     }
 }
