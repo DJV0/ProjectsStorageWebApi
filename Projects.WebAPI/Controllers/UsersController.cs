@@ -26,38 +26,38 @@ namespace Projects.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return Ok(_userService.GetAll());
+            return Ok(await _userService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public async Task<ActionResult<User>> Get(int id)
         {
-            return Ok(_userService.Get(id));
+            return Ok(await _userService.Get(id));
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] UserDTO userDTO)
+        public async Task<ActionResult> Post([FromBody] UserDTO userDTO)
         {
-            User user = _mapper.Map<User>(userDTO);
-            _userService.Add(user);
+            var user = _mapper.Map<User>(userDTO);
+            await _userService.Add(user);
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] UserDTO userDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] UserDTO userDTO)
         {
             if (id != userDTO.Id) return BadRequest();
             var user = _mapper.Map<User>(userDTO);
-            _userService.Update(user);
+            await _userService.Update(user);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _userService.Delete(id);
+            await _userService.Delete(id);
             return NoContent();
         }
     }

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Projects.BLL.Services
 {
@@ -17,41 +19,41 @@ namespace Projects.BLL.Services
             _context = context;
         }
 
-        public void Add(User user)
+        public async Task Add(User user)
         {
-            if (user.TeamId != null && !ExistTeam(user.TeamId)) return;
+            if (user.TeamId != null && !await ExistTeam(user.TeamId))  throw new ArgumentException("Invalid input data!");
             user.RegisteredAt = DateTime.Now;
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(User user)
+        public async Task Delete(User user)
         {
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var user = _context.Users.Find(id);
-            if (user != null) Delete(user);
+            var user = await _context.Users.FindAsync(id);
+            if (user != null) await Delete(user);
         }
 
-        public User Get(int id)
+        public async Task<User> Get(int id)
         {
-            return _context.Users
-                .FirstOrDefault(user => user.Id == id);
+            return await _context.Users
+                .FirstOrDefaultAsync(user => user.Id == id);
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _context.Users
-                .ToList();
+            return await _context.Users
+                .ToListAsync();
         }
 
-        public void Update(User user)
+        public async Task Update(User user)
         {
-            if (user.TeamId != null && !ExistTeam(user.TeamId)) return;
+            if (user.TeamId != null && !await ExistTeam(user.TeamId)) throw new ArgumentException("Invalid input data!");
 
             _context.Users.Attach(user);
             _context.Entry(user).Property(t => t.FirstName).IsModified = true;
@@ -60,12 +62,12 @@ namespace Projects.BLL.Services
             _context.Entry(user).Property(t => t.BirthDay).IsModified = true;
             _context.Entry(user).Property(t => t.TeamId).IsModified = true;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        private bool ExistTeam(int? id)
+        private async Task<bool> ExistTeam(int? id)
         {
-            return _context.Teams.Find(id) != null;
+            return await _context.Teams.FindAsync(id) != null;
         }
     }
 }

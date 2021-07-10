@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Projects.DAL.Entities;
+using System.Threading.Tasks;
 
 namespace Projects.WebAPI.Controllers
 {
@@ -22,47 +22,47 @@ namespace Projects.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<KeyValuePair<Project, int>>> GetTask1(int id)
+        public async Task<ActionResult<List<KeyValuePair<DAL.Entities.Project, int>>>> GetTask1(int id)
         {
-            return Ok(_tasksService.GetProjectTasksCountByAuthorId(id).ToList());
+            return Ok((await _tasksService.GetProjectTasksCountByAuthorId(id)).ToList());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<Task>> GetTask2(int id)
+        public async Task<ActionResult<List<DAL.Entities.Task>>> GetTask2(int id)
         {
-            return Ok(_tasksService.GetPerformerTasks(id));
+            return Ok(await _tasksService.GetPerformerTasks(id));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<Task3DTO>> GetTask3(int id)
+        public async Task<ActionResult<List<Task3DTO>>> GetTask3(int id)
         {
             //id = 114
-            return Ok(_tasksService.GetFinishedPerformerTasks2021(id));
+            return Ok(await _tasksService.GetFinishedPerformerTasks2021(id));
         }
 
         [HttpGet]
-        public ActionResult<List<Task4DTO>> GetTask4()
+        public async Task<ActionResult<List<Task4DTO>>> GetTask4()
         {
-            return Ok(_tasksService.GetTeamsWhichMembersAgeOver10Years());
+            return Ok(await _tasksService.GetTeamsWhichMembersAgeOver10Years());
         }
 
         [HttpGet]
-        public ActionResult<List<Task5DTO>> GetTask5()
+        public async Task<ActionResult<List<Task5DTO>>> GetTask5()
         {
-            return Ok(_tasksService.GetSortedUsers());
+            return Ok(await _tasksService.GetSortedUsers());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Task6DTO> GetTask6(int id)
+        public async Task<ActionResult<Task6DTO>> GetTask6(int id)
         {
             //id = 28
-            return Ok(_tasksService.GetTask6(id));
+            return Ok(await _tasksService.GetTask6(id));
         }
 
         [HttpGet]
-        public ActionResult<List<Task7DTO>> GetTask7()
+        public async Task<ActionResult<List<Task7DTO>>> GetTask7()
         {
-            return Ok(_tasksService.GetTask7());
+            return Ok(await _tasksService.GetTask7());
         }
     }
 }

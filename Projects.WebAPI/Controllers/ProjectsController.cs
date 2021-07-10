@@ -26,38 +26,38 @@ namespace Projects.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Project>> Get()
+        public async Task<ActionResult<IEnumerable<Project>>> Get()
         {
-            return Ok(_projectService.GetAll());
+            return Ok(await _projectService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Project> Get(int id)
+        public async Task<ActionResult<Project>> Get(int id)
         {
-            return Ok(_projectService.Get(id));
+            return Ok(await _projectService.Get(id));
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ProjectDTO projectDTO)
+        public async Task<ActionResult> Post([FromBody] ProjectDTO projectDTO)
         {
-            Project project = _mapper.Map<Project>(projectDTO);
-            _projectService.Add(project);
+            var project = _mapper.Map<Project>(projectDTO);
+            await _projectService.Add(project);
             return CreatedAtAction(nameof(Get), new { id = project.Id }, project);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ProjectDTO projectDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] ProjectDTO projectDTO)
         {
             if (id != projectDTO.Id) return BadRequest();
-            Project project = _mapper.Map<Project>(projectDTO);
-            _projectService.Update(project);
+            var project = _mapper.Map<Project>(projectDTO);
+            await _projectService.Update(project);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _projectService.Delete(id);
+            await _projectService.Delete(id);
             return NoContent();
         }
     }

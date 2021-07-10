@@ -7,6 +7,7 @@ using Projects.BLL.Interfaces;
 using Projects.DAL.Entities;
 using Projects.DAL;
 using Microsoft.EntityFrameworkCore;
+using Task = System.Threading.Tasks.Task;
 
 namespace Projects.BLL.Services
 {
@@ -18,42 +19,42 @@ namespace Projects.BLL.Services
             _context = context;
         }
 
-        public void Add(Team team)
+        public async Task Add(Team team)
         {
             team.CreatedAt = DateTime.Now;
-            _context.Teams.Add(team);
-            _context.SaveChanges();
+            await _context.Teams.AddAsync(team);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Team team)
+        public async Task Delete(Team team)
         {
             _context.Teams.Remove(team);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var team = _context.Teams.Find(id);
-            if (team != null) Delete(team);
+            var team = await _context.Teams.FindAsync(id);
+            if (team != null) await Delete(team);
         }
 
-        public Team Get(int id)
+        public async Task<Team> Get(int id)
         {
-            return _context.Teams
-                .FirstOrDefault(team => team.Id == id);
+            return await _context.Teams
+                .FirstOrDefaultAsync(team => team.Id == id);
         }
 
-        public IEnumerable<Team> GetAll()
+        public async Task<IEnumerable<Team>> GetAll()
         {
-            return _context.Teams
-                .ToList();
+            return await _context.Teams
+                .ToListAsync();
         }
 
-        public void Update(Team team)
+        public async Task Update(Team team)
         {
             _context.Teams.Attach(team);
             _context.Entry(team).Property(t => t.Name).IsModified = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

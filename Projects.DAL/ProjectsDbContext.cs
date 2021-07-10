@@ -25,10 +25,16 @@ namespace Projects.DAL
                 .WithOne(t => t.Performer)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            List<Project> projects = JsonConvert.DeserializeObject<List<Project>>(File.ReadAllText(@"../Data/projects.json"));
-            List<User> users = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(@"../Data/users.json"));
-            List<Task> tasks = JsonConvert.DeserializeObject<List<Task>>(File.ReadAllText(@"../Data/tasks.json"));
-            List<Team> teams = JsonConvert.DeserializeObject<List<Team>>(File.ReadAllText(@"../Data/teams.json"));
+            var dirPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+
+            List<Project> projects = JsonConvert
+                .DeserializeObject<List<Project>>(File.ReadAllText(Path.Combine(dirPath,"Data/projects.json")));
+            List<User> users = JsonConvert
+                .DeserializeObject<List<User>>(File.ReadAllText(Path.Combine(dirPath, "Data/users.json")));
+            List<Task> tasks = JsonConvert
+                .DeserializeObject<List<Task>>(File.ReadAllText(Path.Combine(dirPath, "Data/tasks.json")));
+            List<Team> teams = JsonConvert
+                .DeserializeObject<List<Team>>(File.ReadAllText(Path.Combine(dirPath, "Data/teams.json")));
 
             modelBuilder.Entity<User>().HasData(users);
             modelBuilder.Entity<Team>().HasData(teams);

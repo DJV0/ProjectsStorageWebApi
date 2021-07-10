@@ -25,43 +25,43 @@ namespace Projects.WebAPI.Controllers
         }     
 
         [HttpGet]
-        public ActionResult<IEnumerable<Team>> Get()
+        public async Task<ActionResult<IEnumerable<Team>>> Get()
         {
-            return Ok(_teamService.GetAll());
+            return Ok(await _teamService.GetAll());
             
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Team> Get(int id)
+        public async Task<ActionResult<Team>> Get(int id)
         {
-            return Ok(_teamService.Get(id));
+            return Ok(await _teamService.Get(id));
         }
 
         [HttpPost]
-        public ActionResult Post(TeamDTO teamDTO)
+        public async Task<ActionResult> Post(TeamDTO teamDTO)
         {
-            Team team = _mapper.Map<Team>(teamDTO);
-            _teamService.Add(team);
+            var team = _mapper.Map<Team>(teamDTO);
+            await _teamService.Add(team);
             return CreatedAtAction(nameof(Get), new { id = team.Id }, team);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] TeamDTO teamDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] TeamDTO teamDTO)
         {
             if(id != teamDTO.Id)
             {
                 return BadRequest();
             }
 
-            Team team = _mapper.Map<Team>(teamDTO);
-            _teamService.Update(team);
+            var team = _mapper.Map<Team>(teamDTO);
+            await _teamService.Update(team);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _teamService.Delete(id);
+            await _teamService.Delete(id);
             return NoContent();
         }
     }

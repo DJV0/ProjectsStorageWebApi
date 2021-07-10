@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projects.BLL.Interfaces;
 using Projects.DAL;
-using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Projects.BLL.Services
 {
@@ -17,44 +17,44 @@ namespace Projects.BLL.Services
             _context = context;
         }
 
-        public void Add(Task task)
+        public async Task Add(DAL.Entities.Task task)
         {
-            if (!ExistProject(task.ProjectId) || !ExistPerformer(task.PerformerId) ||
-                task.FinishedAt != null && task.FinishedAt < DateTime.Now) return;
+            if (!await ExistProject(task.ProjectId) || !await ExistPerformer(task.PerformerId)  ||
+                task.FinishedAt != null && task.FinishedAt < DateTime.Now) throw new ArgumentException("Invalid input data!");
             task.CreatedAt = DateTime.Now;
-            _context.Tasks.Add(task);
-            _context.SaveChanges();
+            await _context.Tasks.AddAsync(task);
+            await _context.SaveChangesAsync();
         }
 
 
-        public void Delete(Task task)
+        public async Task Delete(DAL.Entities.Task task)
         {
             _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var task = _context.Tasks.Find(id);
-            if (task != null) Delete(task);
+            var task = await _context.Tasks.FindAsync(id);
+            if (task != null) await Delete(task);
         }
 
-        public Task Get(int id)
+        public async Task<DAL.Entities.Task> Get(int id)
         {
-            return _context.Tasks
-                .FirstOrDefault(task => task.Id == id);
+            return await _context.Tasks
+                .FirstOrDefaultAsync(task => task.Id == id);
         }
 
-        public IEnumerable<Task> GetAll()
+        public async Task<IEnumerable<DAL.Entities.Task>> GetAll()
         {
-            return _context.Tasks
-                .ToList();
+            return await _context.Tasks
+                .ToListAsync();
         }
 
-        public void Update(Task task)
+        public async Task Update(DAL.Entities.Task task)
         {
-            if (!ExistProject(task.ProjectId) || !ExistPerformer(task.PerformerId) ||
-                task.FinishedAt != null && task.FinishedAt < task.CreatedAt) return;
+            if (!await ExistProject(task.ProjectId) || !await ExistPerformer (task.PerformerId) ||
+                task.FinishedAt != null && task.FinishedAt < task.CreatedAt) throw new ArgumentException("Invalid input data!");
             _context.Tasks.Attach(task);
             _context.Entry(task).Property(t => t.Name).IsModified = true;
             _context.Entry(task).Property(t => t.Description).IsModified = true;
@@ -63,17 +63,17 @@ namespace Projects.BLL.Services
             _context.Entry(task).Property(t => t.ProjectId).IsModified = true;
             _context.Entry(task).Property(t => t.PerformerId).IsModified = true;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        private bool ExistPerformer(int id)
+        private async Task<bool> ExistPerformer(int id)
         {
-            return _context.Users.Find(id) != null;
+            return await _context.Users.FindAsync(id) != null;
         }
 
-        private bool ExistProject(int id)
+        private async Task<bool> ExistProject(int id)
         {
-            return _context.Projects.Find(id) != null;
+            return await _context.Projects.FindAsync(id) != null;
         }
     }
 }

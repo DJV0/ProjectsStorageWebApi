@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Projects.BLL.Interfaces;
-using Projects.DAL.Entities;
 using Projects.WebAPI.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace Projects.WebAPI.Controllers
 {
@@ -25,38 +24,38 @@ namespace Projects.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Task>> Get()
+        public async Task<ActionResult<IEnumerable<DAL.Entities.Task>>> Get()
         {
-            return Ok(_taskService.GetAll());
+            return Ok(await _taskService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Task> Get(int id)
+        public async Task<ActionResult<DAL.Entities.Task>> Get(int id)
         {
-            return Ok(_taskService.Get(id));
+            return Ok(await _taskService.Get(id));
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] TaskDTO taskDTO)
+        public async Task<ActionResult> Post([FromBody] TaskDTO taskDTO)
         {
-            Task task = _mapper.Map<Task>(taskDTO);
-            _taskService.Add(task);
+            var task = _mapper.Map<DAL.Entities.Task>(taskDTO);
+            await _taskService.Add(task);
             return CreatedAtAction(nameof(Get), new { id = task.Id }, task);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] TaskDTO taskDTO)
+        public async Task<ActionResult> Put(int id, [FromBody] TaskDTO taskDTO)
         {
             if (id != taskDTO.Id) return BadRequest();
-            Task task = _mapper.Map<Task>(taskDTO);
-            _taskService.Update(task);
+            var task = _mapper.Map<DAL.Entities.Task>(taskDTO);
+            await _taskService.Update(task);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _taskService.Delete(id);
+            await _taskService.Delete(id);
             return NoContent();
         }
     }

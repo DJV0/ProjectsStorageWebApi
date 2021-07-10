@@ -1,20 +1,20 @@
 ﻿using Projects.BLL.Entities;
-using Projects.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Projects.BLL.Interfaces
 {
     public interface ILinqTasksService
     {
-        Dictionary<Project, int> GetProjectTasksCountByAuthorId(int authorId);
-        List<Task> GetPerformerTasks(int performerId);
-        List<Task3DTO> GetFinishedPerformerTasks2021(int performerId);
-        List<Task4DTO> GetTeamsWhichMembersAgeOver10Years();
-        List<Task5DTO> GetSortedUsers();
-        Task6DTO GetTask6(int userId);
-        List<Task7DTO> GetTask7();
+        Task<Dictionary<DAL.Entities.Project, int>> GetProjectTasksCountByAuthorId(int authorId);
+        Task<List<DAL.Entities.Task>> GetPerformerTasks(int performerId);
+        Task<List<Task3DTO>> GetFinishedPerformerTasks2021(int performerId);
+        Task<List<Task4DTO>> GetTeamsWhichMembersAgeOver10Years();
+        Task<List<Task5DTO>> GetSortedUsers();
+        Task<Task6DTO> GetTask6(int userId);
+        Task<List<Task7DTO>> GetTask7();
     }
 }
